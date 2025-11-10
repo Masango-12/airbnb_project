@@ -574,6 +574,15 @@ img {
   position: relative;
   scroll-padding: 0 24px;
   margin: 0 -12px;
+  width: 100%;
+  max-width: 100%;
+  scroll-snap-type: x mandatory;
+}
+
+.scroll-row .stay-card {
+  min-width: calc((100% - 60px) / 6); /* 60px = 5 gaps * 12px */
+  scroll-snap-align: start;
+  flex: 0 0 auto;
 }
 
 .scroll-row::-webkit-scrollbar {
@@ -901,70 +910,12 @@ img {
     width: 177.42px;
   }
 
-  .stay-card .thumb {
-    position: relative;
-    width: 100%;
-    padding-top: 118.92%;
-    overflow: hidden;
-    border-radius: 12px;
+  .footer-columns {
+    grid-template-columns: 1fr 1fr;
   }
 
-  .stay-card .thumb img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 16px;
-  }
-
-  .thumb-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    pointer-events: none;
-  }
-
-  .thumb-overlay > * {
-    pointer-events: auto;
-  }
-  .heart:hover {
-    transform: scale(1.1);
-  }
-
-  .heart:active {
-    transform: scale(0.95);
-  }
-
-  .stay-card .badge,
-  .stay-card .heart {
-    position: absolute;
-    z-index: 1;
-  }
-
-  .stay-card .badge {
-    top: -1;
-    left: 1;
-  }
-
-  .stay-card .heart {
-    top: -1;
-    right: 0;
-    border: none;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+  .footer-bottom {
+    padding: 24px;
   }
 }
 
@@ -1083,8 +1034,16 @@ img {
     min-height: 100vh;
     min-height: 100dvh;
     max-width: 100%;
+    width: 100vw;
+    position: relative;
     /* responsive side padding used for header search and center nav */
     --mobile-side-pad: 24px;
+  }
+  
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
   }
 
   .Desktop-view {
@@ -1181,10 +1140,19 @@ img {
 
   .mobile-category-tabs {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     gap: 12px;
-    padding: 0;
+    padding: 0 16px;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+  
+  .mobile-category-tabs::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari and Opera */
   }
 
   .category-tab {
@@ -1244,16 +1212,14 @@ img {
 
   .mobile-nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    padding: 0 12px;
     background-color: var(--mobile-airbnb-white);
-    position: static;
-    box-sizing: border-box;
-    width: 100%;
-    z-index: 90;
-    max-width: 100%;
-    overflow-x: hidden;
-    padding: 16px 0 0 var(--mobile-side-pad);
+    border-bottom: 1px solid var(--mobile-border-color);
+    position: relative;
+    z-index: 10;
+    gap: 4px;
   }
 
   .mobile-nav > a {
@@ -1274,12 +1240,18 @@ img {
       gap: 2px;
       padding: 4px 6px;
       font-size: 9px;
+      min-width: 64px;
     }
     .mobile-section {
       padding: 16px 12px;
     }
     .mobile-view {
-      --mobile-side-pad: 16px;
+      --mobile-side-pad: 12px;
+    }
+    .mobile-stay-cards {
+      padding-left: 12px;
+      margin-right: -12px;
+      width: calc(100% + 12px);
     }
   }
 
@@ -1289,7 +1261,7 @@ img {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 16px 12px;
+    padding: 12px 8px; /* Reduced padding */
     color: var(--mobile-airbnb-gray);
     font-size: 12px;
     font-weight: 500;
@@ -1297,13 +1269,14 @@ img {
     border-radius: 8px;
     transition: var(--mobile-transition);
     text-decoration: none;
+    margin: 0; /* Ensure no margin */
   }
 
   .mobile-nav-tab {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 16px 12px;
+    padding: 12px 8px; /* Matches .nav-tab padding */
     color: var(--mobile-airbnb-gray);
     font-size: 12px;
     font-weight: 500;
@@ -1311,6 +1284,7 @@ img {
     border-radius: 8px;
     transition: var(--mobile-transition);
     text-decoration: none;
+    margin: 0; /* Ensure no margin */
   }
 
   .mobile-nav .mobile-icon,
@@ -1322,12 +1296,12 @@ img {
     border-radius: 16px;
   }
 .nav-tab .mobile-icons {
-    width: 36px;
-    height: 36px;
+    width: 28px;
+    height: 28px;
     object-fit: cover;
     display: block;
-    border-radius: 16px;
-    margin-right: 12px;
+    border-radius: 12px;
+    margin: 0;
   }
   .nav-tab svg {
     width: 36px;
@@ -1342,7 +1316,7 @@ img {
     content: "";
     bottom: 0;
     left: 50%;
-    width: 100%;
+    width: 36%;
     height: 2px;
     background-color: var(--mobile-airbnb-dark);
     border-radius: 1px;
